@@ -19,3 +19,10 @@ env/
 .vscode/
 .idea/
 *.log
+
+# Pipeline run outputs and ad hoc downloaded protein FASTA at the repo
+# root (reproducible via `protaine run` / NCBI efetch, not checked in).
+# Curated example proteins live in data/examples/ instead.
+/*.fasta
+/*_structures.json
+/*_structures3d/
