@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PROT-AI-NE - Viewer de structures</title>
+<link rel="stylesheet" href="vendor/fornac.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="disclaimer-banner">
+  <strong>Avertissement.</strong> PROT-AI-NE explore un sous-espace guide de
+  sequences mRNA candidates ; il ne garantit pas l'optimalite globale et ne
+  fait aucune recherche exhaustive. Les sequences et structures affichees
+  sont des candidats computationnels <strong>non valides
+  experimentalement</strong> : aucune garantie de securite, d'efficacite ou
+  d'expression reelle en cellule. Toute application medicale requiert une
+  validation en laboratoire puis des essais cliniques.
+</header>
+
+<main>
+  <h1>PROT-AI-NE - Viewer de structures candidates</h1>
+
+  <section id="load-panel" class="panel">
+    <h2>1. Charger un run</h2>
+    <p class="hint">
+      Charge le fichier <code>&lt;nom&gt;_structures.json</code> produit par
+      <code>protaine run --output ...</code> (voir <code>export.py</code>).
+    </p>
+    <div class="load-row">
+      <label for="json-file-input">Depuis un fichier local</label>
+      <input type="file" id="json-file-input" accept="application/json,.json" />
+    </div>
+    <div class="load-row">
+      <label for="json-url-input">
+        Ou depuis une URL relative (page servie par un serveur HTTP - le
+        chemin est relatif a ce fichier <code>viewer/index.html</code>, pas
+        au dossier ou tourne le serveur). Si le JSON a ete produit a la
+        racine du projet (cas normal de <code>protaine run</code>), le
+        chemin par defaut ci-dessous (<code>../</code>) est deja correct
+        tant que le serveur est lance depuis la racine du projet.
+      </label>
+      <input type="text" id="json-url-input" value="../top_candidates_structures.json" />
+      <button type="button" id="json-url-load-btn">Charger</button>
+    </div>
+    <p id="load-error" class="error" hidden></p>
+  </section>
+
+  <section id="controls" class="panel" hidden>
+    <h2>2. Candidat - <span id="protein-label"></span></h2>
+    <div class="controls-row">
+      <label for="rank-select">Candidat</label>
+      <select id="rank-select"></select>
+
+      <span class="mode-toggle" role="group" aria-label="Mode de rendu">
+        <button type="button" id="mode-2d-btn" class="mode-btn active">Structure secondaire (2D)</button>
+        <button type="button" id="mode-3d-btn" class="mode-btn">Structure tertiaire (3D)</button>
+      </span>
+    </div>
+
+    <div class="score-panel">
+      <div class="score"><span class="score-label">Fitness composite</span><span id="score-fitness" class="score-value"></span></div>
+      <div class="score"><span class="score-label">%GC</span><span id="score-gc" class="score-value"></span></div>
+      <div class="score"><span class="score-label">Energie libre (MFE)</span><span id="score-mfe" class="score-value"></span></div>
+      <div class="score"><span class="score-label">CAI</span><span id="score-cai" class="score-value"></span></div>
+    </div>
+
+    <div id="render-2d" class="render-area">
+      <p class="render-caption">Structure secondaire predite (ViennaRNA, calcul local, notation dot-bracket).</p>
+      <div class="forna-host"></div>
+    </div>
+
+    <div id="render-3d" class="render-area" hidden>
+      <p class="render-caption">Structure tertiaire predite.</p>
+      <p class="disclaimer-3d">
+        <strong>La prediction de structure tertiaire de l'ARN reste un
+        probleme de recherche ouvert</strong>, bien moins mature que le
+        repliement des proteines (il n'existe pas d'equivalent AlphaFold
+        pour l'ARN). Meme obtenue localement via RhoFold+, la structure
+        affichee ici est <strong>indicative et non validee
+        experimentalement</strong> : ne jamais la traiter comme une
+        certitude structurale.
+      </p>
+      <div class="viewer-3d-canvas"></div>
+      <p id="render-3d-message" class="render-3d-message" hidden></p>
+      <div class="load-row">
+        <label for="pdb-file-input">Charger manuellement un fichier PDB pour ce candidat (optionnel)</label>
+        <input type="file" id="pdb-file-input" accept=".pdb,chemical/x-pdb" />
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="vendor/fornac.js"></script>
+<script src="vendor/3Dmol-min.js"></script>
+<script src="viewer.js"></script>
+</body>
+</html>

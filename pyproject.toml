@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "protaine"
+version = "0.1.0"
+description = "Generation et scoring de candidats ARNm optimises a partir d'une sequence proteique cible."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Sebastien" }]
+
+dependencies = [
+    "biopython>=1.83",
+    "dnachisel>=3.2",
+    "duckdb>=0.10",
+]
+
+[project.optional-dependencies]
+structure = ["ViennaRNA>=2.6"]
+api = ["fastapi>=0.110", "uvicorn>=0.29"]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+protaine = "protaine.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+protaine = []
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
